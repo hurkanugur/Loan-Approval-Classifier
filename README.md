@@ -4,7 +4,7 @@
 This project predicts **loan approval outcomes (Approved/Rejected)** using a neural network built with **PyTorch**.  
 It demonstrates a full machine learning pipeline from data loading to inference, including:
 
-- 🧠 **Neural Network** with multiple hidden layers using ReLU activation function  
+- 🧠 **Neural Network** with multiple hidden layers using LeakyReLU activation function  
 - ⚖️ **Binary Cross-Entropy (BCEWithLogitsLoss)** for training
 - 🚀 Adam optimizer for gradient updates 
 - 🔀 **Mini-batch training** with `DataLoader`  
