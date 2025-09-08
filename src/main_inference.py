@@ -60,7 +60,7 @@ def main():
     ])
 
     X = dataset.prepare_data_for_inference(df)
-    input_dim = X.shape[1]
+    input_dim = X[0].numel()
 
     # -------------------------
     # Load trained model
@@ -74,7 +74,8 @@ def main():
     model.eval()
     X = X.to(device)
     with torch.no_grad():
-        probabilities = torch.sigmoid(model(X))
+        outputs = model(X)
+        probabilities = torch.sigmoid(outputs)
         predictions = (probabilities > config.CLASSIFICATION_THRESHOLD).float()
 
     # -------------------------
