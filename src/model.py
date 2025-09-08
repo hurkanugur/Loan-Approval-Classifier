@@ -8,18 +8,18 @@ class LoanApprovalClassificationModel(nn.Module):
 
         self.net = nn.Sequential(
             nn.Linear(input_dim, 128),
-            nn.LeakyReLU(0.01),
+            nn.LeakyReLU(config.LEAKY_RELU_SLOPE),
             nn.Dropout(0.2),
 
             nn.Linear(128, 64),
-            nn.LeakyReLU(0.01),
+            nn.LeakyReLU(config.LEAKY_RELU_SLOPE),
             nn.Dropout(0.1),
 
             nn.Linear(64, 32),
-            nn.LeakyReLU(0.01),
+            nn.LeakyReLU(config.LEAKY_RELU_SLOPE),
 
             nn.Linear(32, 8),
-            nn.LeakyReLU(0.01),
+            nn.LeakyReLU(config.LEAKY_RELU_SLOPE),
 
             nn.Linear(8, 1)
         )
@@ -33,7 +33,7 @@ class LoanApprovalClassificationModel(nn.Module):
 
     def init_weights(self, m):
         if isinstance(m, nn.Linear):
-            nn.init.kaiming_uniform_(m.weight, nonlinearity='relu')
+            nn.init.kaiming_uniform_(m.weight, a=config.LEAKY_RELU_SLOPE, nonlinearity='leaky_relu')
             nn.init.zeros_(m.bias)
 
     def save(self):

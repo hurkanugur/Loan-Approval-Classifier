@@ -8,6 +8,7 @@ DATASET_CSV_PATH = "../data/loan_data.csv"
 # -------------------------
 # Training hyperparameters
 # -------------------------
+LEAKY_RELU_SLOPE = 0.01
 LEARNING_RATE = 5e-4
 WEIGHT_DECAY = 1e-4
 BATCH_SIZE = 256
