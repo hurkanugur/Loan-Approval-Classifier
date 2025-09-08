@@ -86,24 +86,35 @@ def test_model(model, test_loader, device, n_samples=10):
 
 
 def main():
+
+    # Select CPU or GPU
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"• Selected device: {device}")
 
+    # Load and prepare data
     dataset = LoanApprovalDataset()
     train_loader, val_loader, test_loader = dataset.prepare_data_for_training()
 
-    input_dim = dataset.get_input_dim(train_loader)
+    # Initialize model, optimizer, loss
+    input_dim = dataset.get_flattened_input_size(train_loader)
     model = LoanApprovalClassificationModel(input_dim=input_dim, device=device)
     optimizer = torch.optim.Adam(model.parameters(), lr=config.LEARNING_RATE, weight_decay=config.WEIGHT_DECAY)
     loss_fn = nn.BCEWithLogitsLoss()
+
+    # Initialize LossMonitor
     loss_monitor = LossMonitor()
 
+    # Train the model
     train_model(model, train_loader, val_loader, optimizer, loss_fn, device, loss_monitor)
+
+    # Test the model
     test_model(model, test_loader, device)
 
+    # Save the model and feature transformer
     model.save()
     dataset.save_feature_transformer()
 
+    # Keep the final plot displayed
     loss_monitor.close()
 
 if __name__ == "__main__":

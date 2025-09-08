@@ -33,9 +33,11 @@ class LoanApprovalDataset:
         ]
 
     # ----------------- Public Methods -----------------
-    def get_input_dim(self, data_loader):
+
+    def get_flattened_input_size(self, data_loader):
+        """Return number of input features per sample after flattening (for MLPs)."""
         sample_X, _ = next(iter(data_loader))
-        input_dim = sample_X.shape[1]
+        input_dim = sample_X[0].numel()
         print(f"• Input dimension: {input_dim}")
         return input_dim
 
@@ -55,6 +57,7 @@ class LoanApprovalDataset:
         return X
 
     # ----------------- Save / Load -----------------
+
     def save_feature_transformer(self):
         os.makedirs(os.path.dirname(config.FEATURE_TRANSFORMER_PATH), exist_ok=True)
         with open(config.FEATURE_TRANSFORMER_PATH, "wb") as f:

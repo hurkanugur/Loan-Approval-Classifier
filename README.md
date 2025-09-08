@@ -38,7 +38,7 @@ git clone https://github.com/hurkanugur/Loan-Approval-Classifier.git
 
 - Navigate to the `Loan-Approval-Classifier` directory
 ```bash
-cd Car_Price_Predictor
+cd Loan-Approval-Classifier
 ```
 
 - Install dependencies
