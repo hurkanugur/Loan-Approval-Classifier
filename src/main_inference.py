@@ -2,15 +2,16 @@ import pandas as pd
 import torch
 import config
 from dataset import LoanApprovalDataset
+from device_manager import DeviceManager
 from model import LoanApprovalClassificationModel
 
 def main():
     # -------------------------
-    # Select device
+    # Select CUDA (GPU) / MPS (Mac) / CPU
     # -------------------------
     print("-------------------------------------")
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"• Selected device: {device}")
+    device_manager = DeviceManager()
+    device = device_manager.device
 
     # -------------------------
     # Load dataset normalization params and categorical mappings
@@ -81,6 +82,7 @@ def main():
     # -------------------------
     # Display predictions
     # -------------------------
+    print()
     print("Predicted Loan Approvals:")
     for idx, row in df.iterrows():
         status = "Approved" if predictions[idx].item() == 1.0 else "Rejected"
@@ -104,6 +106,13 @@ def main():
         print(f"Previous Loan Defaults: {row['previous_loan_defaults_on_file']}")
         print(f"Predicted Loan Status: {status} (Probability: {prob:.2f})")
         print()
+        
+    # -------------------------
+    # Release the memory
+    # -------------------------
+    print("-------------------------------------")
+    device_manager.release_memory()
+    print("-------------------------------------")
 
 if __name__ == "__main__":
     main()
