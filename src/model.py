@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-import config
+from src import config
 
 class LoanApprovalClassificationModel(nn.Module):
     def __init__(self, input_dim, device):

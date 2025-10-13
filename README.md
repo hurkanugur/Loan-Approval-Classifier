@@ -2,7 +2,6 @@
 
 ## 📖 Overview
 This project predicts **loan approval outcomes (Approved/Rejected)** using a neural network built with **PyTorch**.  
-It demonstrates a full machine learning pipeline from data loading to inference, including:
 
 - 🧠 **Neural Network** with multiple hidden layers using **LeakyReLU** activation function and **Dropout**  
 - ⚖️ **Binary Cross-Entropy (BCEWithLogitsLoss)** for training
@@ -11,6 +10,15 @@ It demonstrates a full machine learning pipeline from data loading to inference,
 - 📊 **Train/Validation/Test split** for robust evaluation  
 - 📈 **Live training & validation loss monitoring**  
 - ✅ **Sigmoid activation on the output** to produce probabilities, with a threshold for Approved/Rejected decision
+- 🎨 **Interactive Gradio Interface** for real-time prediction
+
+---
+
+## 🖼️ Application Screenshot
+
+Below is a preview of the **Gradio Interface** used for real-time classification:
+
+![Application Screenshot](assets/app_screenshot.png)
 
 ---
 
@@ -19,6 +27,7 @@ It demonstrates a full machine learning pipeline from data loading to inference,
 - **pandas** – data handling  
 - **matplotlib** – loss visualization  
 - **pickle** – saving/loading normalization params and trained model
+- **Gradio** — interactive web interface for real-time model demos 
 
 ---
 
@@ -46,11 +55,6 @@ cd Loan-Approval-Classifier
 pip install -r requirements.txt
 ```
 
-- Navigate to the `Loan-Approval-Classifier/src` directory
-```bash
-cd src
-```
-
 ---
 
 ## 🔧 Setup Python Environment in VS Code
@@ -65,22 +69,31 @@ cd src
 ## 📂 Project Structure
 
 ```bash
+assets/
+└── app_screenshot.png                # Screenshot of the application
+
 data/
-└── loan_data.csv                         # Raw dataset
+└── loan_data.csv                     # Raw dataset
 
 model/
-└── loan_approval_classifier.pth          # Trained model (after training)
+├── loan_approval_classifier.pth      # Trained model (after training)
+├── feature_transformer.pkl           # Fitted preprocessing transformer
+└── statistics.pkl                    # Preprocessing stats
 
 src/
-├── config.py                             # Paths, hyperparameters, split ratios
-├── dataset.py                            # Data loading & preprocessing
-├── device_manager.py                     # Selects and manages compute device
-├── main_train.py                         # Training & model saving
-├── main_inference.py                     # Inference pipeline
-├── model.py                              # Neural network definition
-├── visualize.py                          # Training/validation plots
+├── config.py                         # Paths, hyperparameters, split ratios
+├── dataset.py                        # Data loading & preprocessing
+├── device_manager.py                 # Selects and manages compute device
+├── train.py                          # Training pipeline
+├── inference.py                      # Inference pipeline
+├── model.py                          # Neural network definition
+└── visualize.py                      # Training/validation plots
 
-requirements.txt                          # Python dependencies
+main/
+├── main_train.py                     # Entry point for training
+└── main_inference.py                 # Entry point for inference
+
+requirements.txt                      # Python dependencies
 ```
 
 ---
@@ -98,21 +111,33 @@ Input → Linear(128) → LeakyReLU(0.01) → Dropout(0.2)
 ---
 
 ## 📂 Train the Model
+Navigate to the project directory:
 ```bash
-python main_train.py
+cd Loan-Approval-Classifier
+```
+
+Run the training script:
+```bash
+python -m main.main_train
 ```
 or
 ```bash
-python3 main_train.py
+python3 -m main.main_train
 ```
 
 ---
 
-## 📂 Run Predictions on Real Data
+## 📂 Run Inference / Make Predictions
+Navigate to the project directory:
 ```bash
-python main_inference.py
+cd Loan-Approval-Classifier
+```
+
+Run the app:
+```bash
+python -m main.main_inference
 ```
 or
 ```bash
-python3 main_inference.py
+python3 -m main.main_inference
 ```
