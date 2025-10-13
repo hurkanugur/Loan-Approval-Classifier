@@ -6,12 +6,13 @@ from torch.utils.data import TensorDataset, DataLoader, random_split
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 import pickle
-import config
+from src import config
 
 class LoanApprovalDataset:
     def __init__(self):
         """Initialize dataset handler and internal state."""
         self.feature_transformer = None
+        self.num_features = None
 
         # Numeric and categorical columns based on your CSV
         self.numeric_cols = [
@@ -34,13 +35,6 @@ class LoanApprovalDataset:
 
     # ----------------- Public Methods -----------------
 
-    def get_flattened_input_size(self, data_loader):
-        """Return number of input features per sample after flattening (for MLPs)."""
-        sample_X, _ = next(iter(data_loader))
-        input_dim = sample_X[0].numel()
-        print(f"• Input dimension: {input_dim}")
-        return input_dim
-
     def prepare_data_for_training(self):
         """Prepare training, validation, and test DataLoaders from CSV."""
         df = self._load_csv()
@@ -57,6 +51,23 @@ class LoanApprovalDataset:
         return X
 
     # ----------------- Save / Load -----------------
+
+    def save_statistics(self):
+        """Save statistics to file."""
+        stats = {
+            "num_features": self.num_features
+        }
+        os.makedirs(os.path.dirname(config.STATISTICS_PATH), exist_ok=True)
+        with open(config.STATISTICS_PATH, "wb") as f:
+            pickle.dump(stats, f)
+        print(f"• Statistics saved to {config.STATISTICS_PATH}")
+
+    def load_statistics(self):
+        """Load statistics from file."""
+        with open(config.STATISTICS_PATH, "rb") as f:
+            stats = pickle.load(f)
+        self.num_features = stats["num_features"]
+        print(f"• Statistics loaded from {config.STATISTICS_PATH}")
 
     def save_feature_transformer(self):
         os.makedirs(os.path.dirname(config.FEATURE_TRANSFORMER_PATH), exist_ok=True)
@@ -85,7 +96,14 @@ class LoanApprovalDataset:
         X = self.feature_transformer.fit_transform(df)
         if hasattr(X, "toarray"):
             X = X.toarray()
-        return torch.tensor(X, dtype=torch.float32)
+
+        X_tensor = torch.tensor(X, dtype=torch.float32)
+
+        # Save number of input features
+        self.num_features = X_tensor.shape[1]
+        print(f"• Input features (num_features) set to {self.num_features}")
+
+        return X_tensor
 
     def _transform_features(self, df):
         X = self.feature_transformer.transform(df)

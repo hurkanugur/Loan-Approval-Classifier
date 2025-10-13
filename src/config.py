@@ -1,9 +1,10 @@
 # -------------------------
 # Paths
 # -------------------------
-MODEL_PATH = "../model/loan_approval_classifier.pth"
-FEATURE_TRANSFORMER_PATH = "../model/feature_transformer.pkl"
-DATASET_CSV_PATH = "../data/loan_data.csv"
+MODEL_PATH = "model/loan_approval_classifier.pth"
+STATISTICS_PATH= "model/statistics.pkl"
+FEATURE_TRANSFORMER_PATH = "model/feature_transformer.pkl"
+DATASET_CSV_PATH = "data/loan_data.csv"
 
 # -------------------------
 # Training hyperparameters
